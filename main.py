@@ -12,7 +12,7 @@ from aiogram import types
 from aiogram.dispatcher.filters import Text
 from bd_connection import Database
 from keyboards import start_button, start_button2, start_, remove, navigate
-from eljur_connection import Eljur
+from eljur_connection import quart, journal
 from executor import degrees, weeks
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
@@ -27,7 +27,6 @@ dp.middleware.setup(LoggingMiddleware())
 # Хранилище данных
 db = Database("var.db")
 # создает базу данных если ее нет
-connect = Eljur()
 db.cbdt()
 
 userDict = {}
