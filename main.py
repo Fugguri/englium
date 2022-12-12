@@ -11,7 +11,7 @@ from eljur_connection import journal
 from aiogram import types
 from aiogram.dispatcher.filters import Text
 from bd_connection import Database
-from keyboards import start_button, start_button2, start_, remove, navigate
+from keyboards import start_button, start_button2, start_, remove_, navigate
 from eljur_connection import quart, journal
 from executor import degrees, weeks
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
@@ -25,7 +25,7 @@ dp = Dispatcher(bot, storage=storage)
 dp.middleware.setup(LoggingMiddleware())
 
 # Хранилище данных
-db = Database("var.db")
+db = Database("englium.db")
 # создает базу данных если ее нет
 db.cbdt()
 
@@ -37,8 +37,8 @@ Q_DAY = '28'
 Q_HOUR = '19'
 
 W_DAY_OF_WEEK = 'mon'
-W_HOUR = '19'
-W_MINUTE = '00'
+W_HOUR = '20'
+W_MINUTE = '10'
 # Машина состояний для регистрации
 
 
@@ -57,7 +57,6 @@ async def on_shutdown(_):
 
 @dp.message_handler(commands=['start'])
 async def start(message: types.Message):
-    print(message.from_user.id)
     if db.user_exist(telegram_id=message.chat.id):
         hello = f'Привет, <b> {message.from_user.first_name} !</b>\nЧтобы запросить оценки, нажми на кнопку "Журнал". \nФункция Рассылка доступна только на этапе разработки. Рассылает оценки и расписание за текущую неделю, всем зарегистрированным пользователям'
         login, password = db.get_udata(message.chat.id)
@@ -164,11 +163,10 @@ async def maining(sleep_for=1):
     for user in db.all_users():
         login, password = user[2], user[3]
         telegram_id = user[1]
-        print(telegram_id)
         try:
             text = 'Вы подписаны на рассылку сообщений об успеваемости от школы Englium. \nЕсли вы хотите отписаться, нажмите кнопку "Отписаться"\n'
             text += weeks(journal(login, password, week=0))
-            await bot.send_message(telegram_id, text, reply_markup=remove())
+            await bot.send_message(telegram_id, text, reply_markup=remove_)
 
         except:
             await bot.send_message(chat_id=telegram_id, text="Вы подписаны на рассылку сообщений об успеваемости от школы Englium. \nЕсли вы хотите отписаться, нажмите кнопку Отписаться", reply_markup=remove)
@@ -182,10 +180,12 @@ async def mailing_week():
         try:
             text = 'Вы подписаны на рассылку сообщений об успеваемости от школы Englium. \nЕсли вы хотите отписаться, нажмите кнопку "Отписаться"\n'
             text += weeks(journal(login, password, week=-1))
-            await bot.send_message(telegram_id, text, reply_markup=remove())
+            await bot.send_message(telegram_id, text, reply_markup=remove_)
 
         except:
-            await bot.send_message(chat_id=telegram_id, text="Вы подписаны на рассылку сообщений об успеваемости от школы Englium. \nЕсли вы хотите отписаться, нажмите кнопку Отписаться", reply_markup=remove)
+            await bot.send_message(chat_id=telegram_id,
+                                   text="Вы подписаны на рассылку сообщений об успеваемости от школы Englium. \nЕсли вы хотите отписаться, нажмите кнопку Отписаться",
+                                   reply_markup=remove_)
 
 
 async def mailing_quarter():
@@ -196,7 +196,7 @@ async def mailing_quarter():
         try:
             text = 'Вы подписаны на рассылку сообщений об успеваемости от школы Englium. \nЕсли вы хотите отписаться, нажмите кнопку "Отписаться"\n'
             text += weeks(quart(login, password))
-            await bot.send_message(telegram_id, text, reply_markup=remove())
+            await bot.send_message(telegram_id, text, reply_markup=remove_)
 
         except:
             await bot.send_message(chat_id=telegram_id, text="Вы подписаны на рассылку сообщений об успеваемости от школы Englium. \nЕсли вы хотите отписаться, нажмите кнопку Отписаться", reply_markup=remove)

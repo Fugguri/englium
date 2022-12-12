@@ -35,18 +35,16 @@ def start_():
     return start
 
 
-def remove():
-    remove = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
-    de = types.KeyboardButton('Отписаться')
-    register = types.KeyboardButton('/start')
-    journal = types.KeyboardButton('Журнал')
-    passing = types.KeyboardButton('Успеваемость')
-    remove.add(register, journal, passing, de)
-    return remove
+remove_ = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
+de = types.KeyboardButton('Отписаться')
+register = types.KeyboardButton('/start')
+journal = types.KeyboardButton('Журнал')
+passing = types.KeyboardButton('Успеваемость')
+remove_.add(register, journal, passing, de)
 
 
 def navigate():
-    keyboard = [[InlineKeyboardButton("Текущая неделя", callback_data='now'),],
+    keyboard = [[InlineKeyboardButton("Текущая неделя", callback_data='now')],
                 [InlineKeyboardButton('Предыдущая неделя', callback_data="before"),
                  InlineKeyboardButton('Следующая неделя', callback_data="next")],]
 
