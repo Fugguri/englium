@@ -38,7 +38,7 @@ Q_HOUR = '19'
 Q_MINUTE = "00"
 
 W_DAY_OF_WEEK = 'mon'
-W_HOUR = '20'
+W_HOUR = '19'
 W_MINUTE = '10'
 # Машина состояний для регистрации
 
@@ -214,9 +214,9 @@ async def set_time(message: types.Message):
 
 @dp.message_handler(commands=["wday"])
 async def set_time(message: types.Message):
-    global W_DAY
-    W_DAY = message.get_args()
-    await message.answer(f"День недели:{W_DAY}")
+    global W_DAY_OF_WEEK
+    W_DAY_OF_WEEK = message.get_args()
+    await message.answer(f"День недели:{W_DAY_OF_WEEK}")
 
 
 @dp.message_handler(commands=["wmin"])
@@ -260,9 +260,9 @@ async def set_time(message: types.Message):
 
 @dp.message_handler(commands=["mailing"])
 async def mailing_list(message: types.Message):
+    text = message.get_args()
     for user in db.all_users():
         telegram_id = user[1]
-        text = message.get_args()
         await bot.send_message(text=f"{text}", chat_id=telegram_id)
 
 
