@@ -87,6 +87,7 @@ class Journal:
                                                         "mark": result_marks})])
                 info.update(
                     [(week, {"date": date, "isEmpty": False, "comment": "Выходной", "lessons": lessonsDict})])
+        print(info)
         return info
 
 
@@ -154,8 +155,14 @@ class Journal2:
                     if marks:
                         result_marks = "\n"
                         for mark in marks:
+                            if mark.contents[1].attrs["value"]:
+                                val = mark.contents[1].attrs["value"]
+                            elif "Н" in str(mark):
+                                val = "Н"
+                            else:
+                                val = ""
                             cl = [mark.contents[1].attrs["mtype"],
-                                  mark.contents[1].attrs["value"],
+                                  val,
                                   mark.contents[1].attrs["mcomm"],
                                   ]
                             lessonsDict[lessonName]["degrees"] .append(cl)

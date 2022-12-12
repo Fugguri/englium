@@ -1,4 +1,4 @@
-#!/usr/bin/python3.3
+#!/usr/bin/python
 
 import os
 from aiogram import Dispatcher, Bot, executor
@@ -30,7 +30,15 @@ db = Database("var.db")
 db.cbdt()
 
 userDict = {}
-ADMIN_ID = 2071702827
+ADMIN_ID = [2071702827, 248184623,]
+
+Q_MONTHS = '1-5, 9-12'
+Q_DAY = '28'
+Q_HOUR = '19'
+
+W_DAY_OF_WEEK = 'mon'
+W_HOUR = '19'
+W_MINUTE = '00'
 # Машина состояний для регистрации
 
 
@@ -166,18 +174,39 @@ async def maining(sleep_for=1):
             await bot.send_message(chat_id=telegram_id, text="Вы подписаны на рассылку сообщений об успеваемости от школы Englium. \nЕсли вы хотите отписаться, нажмите кнопку Отписаться", reply_markup=remove)
 
 
-async def mailing():
+async def mailing_week():
     for user in db.all_users():
         login, password = user[2], user[3]
         telegram_id = user[1]
 
         try:
             text = 'Вы подписаны на рассылку сообщений об успеваемости от школы Englium. \nЕсли вы хотите отписаться, нажмите кнопку "Отписаться"\n'
-            text += weeks(journal(login, password, week=0))
+            text += weeks(journal(login, password, week=-1))
             await bot.send_message(telegram_id, text, reply_markup=remove())
 
         except:
             await bot.send_message(chat_id=telegram_id, text="Вы подписаны на рассылку сообщений об успеваемости от школы Englium. \nЕсли вы хотите отписаться, нажмите кнопку Отписаться", reply_markup=remove)
+
+
+async def mailing_quarter():
+    for user in db.all_users():
+        login, password = user[2], user[3]
+        telegram_id = user[1]
+
+        try:
+            text = 'Вы подписаны на рассылку сообщений об успеваемости от школы Englium. \nЕсли вы хотите отписаться, нажмите кнопку "Отписаться"\n'
+            text += weeks(quart(login, password))
+            await bot.send_message(telegram_id, text, reply_markup=remove())
+
+        except:
+            await bot.send_message(chat_id=telegram_id, text="Вы подписаны на рассылку сообщений об успеваемости от школы Englium. \nЕсли вы хотите отписаться, нажмите кнопку Отписаться", reply_markup=remove)
+
+
+@dp.message_handler(commands=["time"])
+async def set_time(message: types.Message):
+    global HOUR
+    HOUR = message.get_args()
+    await message.answer(f"{HOUR}")
 
 
 @ dp.message_handler()
@@ -189,7 +218,10 @@ async def text_handler(message: types.Message):
 if __name__ == "__main__":
     scheduler = AsyncIOScheduler(timezone='Europe/Moscow')
     scheduler.start()
-    scheduler.add_job(mailing, 'cron',  hour=21, minute=00)
+    scheduler.add_job(mailing_week, 'cron',
+                      day_of_week=W_DAY_OF_WEEK,  hour=W_HOUR, minute=W_MINUTE)
+    # scheduler.add_job(mailing_quarter, 'cron', month=MONTH
+    #                   day_of_week=DAY_OF_WEEK,  hour=HOUR, minute=MINUTE)
     executor.start_polling(dispatcher=dp,
                            on_shutdown=on_shutdown,
                            on_startup=on_startup,
