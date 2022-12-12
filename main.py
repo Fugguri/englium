@@ -35,6 +35,7 @@ ADMIN_ID = [2071702827, 248184623,]
 Q_MONTHS = '1-5, 9-12'
 Q_DAY = '28'
 Q_HOUR = '19'
+Q_MINUTE = "00"
 
 W_DAY_OF_WEEK = 'mon'
 W_HOUR = '20'
@@ -201,12 +202,68 @@ async def mailing_quarter():
         except:
             await bot.send_message(chat_id=telegram_id, text="Вы подписаны на рассылку сообщений об успеваемости от школы Englium. \nЕсли вы хотите отписаться, нажмите кнопку Отписаться", reply_markup=remove)
 
+    """WEEKS"""
 
-@dp.message_handler(commands=["time"])
+
+@dp.message_handler(commands=["whour"])
 async def set_time(message: types.Message):
-    global HOUR
-    HOUR = message.get_args()
-    await message.answer(f"{HOUR}")
+    global W_HOUR
+    W_HOUR = message.get_args()
+    await message.answer(f"Часы:{W_HOUR}")
+
+
+@dp.message_handler(commands=["wday"])
+async def set_time(message: types.Message):
+    global W_DAY
+    W_DAY = message.get_args()
+    await message.answer(f"День недели:{W_DAY}")
+
+
+@dp.message_handler(commands=["wmin"])
+async def set_time(message: types.Message):
+    global W_MINUTE
+    W_MINUTE = message.get_args()
+    await message.answer(f"Минуты:{W_MINUTE}")
+
+"""quarter"""
+
+
+@dp.message_handler(commands=["qhour"])
+async def set_time(message: types.Message):
+    global Q_HOUR
+    Q_HOUR = message.get_args()
+    await message.answer(f"Часы:{Q_HOUR}")
+
+
+@dp.message_handler(commands=["qday"])
+async def set_time(message: types.Message):
+    global Q_DAY
+    Q_DAY = message.get_args()
+    await message.answer(f"День недели:{Q_DAY}")
+
+
+@dp.message_handler(commands=["qmin"])
+async def set_time(message: types.Message):
+    global Q_MINUTE
+    Q_MINUTE = message.get_args()
+    await message.answer(f"Минуты:{Q_MINUTE}")
+
+
+@dp.message_handler(commands=["qmonths"])
+async def set_time(message: types.Message):
+    global Q_MONTHS
+    Q_MONTHS = message.get_args()
+    await message.answer(f"Минуты:{Q_MONTHS}")
+
+"""Рассылка для """
+
+
+@dp.message_handler(commands=["mailing"])
+async def mailing_list(message: types.Message):
+    for user in db.all_users():
+        telegram_id = user[1]
+        text = message.get_args()
+        await bot.send_message(text=f"{text}", chat_id=telegram_id)
 
 
 @ dp.message_handler()
@@ -220,8 +277,11 @@ if __name__ == "__main__":
     scheduler.start()
     scheduler.add_job(mailing_week, 'cron',
                       day_of_week=W_DAY_OF_WEEK,  hour=W_HOUR, minute=W_MINUTE)
-    # scheduler.add_job(mailing_quarter, 'cron', month=MONTH
-    #                   day_of_week=DAY_OF_WEEK,  hour=HOUR, minute=MINUTE)
+    scheduler.add_job(mailing_quarter, 'cron',
+                      month=Q_MONTHS,
+                      day=Q_DAY,
+                      hour=Q_HOUR,
+                      minute=Q_MINUTE)
     executor.start_polling(dispatcher=dp,
                            on_shutdown=on_shutdown,
                            on_startup=on_startup,
