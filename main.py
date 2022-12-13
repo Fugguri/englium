@@ -59,7 +59,7 @@ async def on_shutdown(_):
 @dp.message_handler(commands=['start'])
 async def start(message: types.Message):
     if db.user_exist(telegram_id=message.chat.id):
-        hello = f'Привет, <b> {message.from_user.first_name} !</b>\nЧтобы запросить оценки, нажми на кнопку "Журнал". \nФункция Рассылка доступна только на этапе разработки. Рассылает оценки и расписание за текущую неделю, всем зарегистрированным пользователям'
+        hello = f'Привет, <b> {message.from_user.first_name} !</b>\nЧтобы запросить оценки, нажми на кнопку "Журнал".'
         login, password = db.get_udata(message.chat.id)
         await message.answer(hello, reply_markup=start_button2(login, password))
     else:
