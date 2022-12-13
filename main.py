@@ -15,7 +15,7 @@ from keyboards import start_button, start_button2, start_, remove_, navigate
 from eljur_connection import quart, journal
 from executor import degrees, weeks
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
-
+from apscheduler.triggers.cron import CronTrigger
 load_dotenv()
 SECRET_KEY = os.getenv('SECRET_KEY')
 
@@ -37,9 +37,9 @@ Q_DAY = '28'
 Q_HOUR = '19'
 Q_MINUTE = "00"
 
-W_DAY_OF_WEEK = 'mon'
-W_HOUR = '19'
-W_MINUTE = '10'
+W_DAY_OF_WEEK = 'tue'
+W_HOUR = '17'
+W_MINUTE = '31'
 # Машина состояний для регистрации
 
 
@@ -50,6 +50,8 @@ class Form(StatesGroup):
 
 async def on_startup(_):
     print("Бот запущен")
+    await week_sched()
+    await quart_sched()
 
 
 async def on_shutdown(_):
@@ -205,6 +207,23 @@ async def mailing_quarter():
     """WEEKS"""
 
 
+@dp.message_handler(commands=["wstart"])
+async def set_time(message: types.Message):
+    for job in scheduler.get_jobs():
+        if job.name == "mailing_week":
+            scheduler.remove_job(job.id)
+            scheduler.add_job(mailing_week, 'cron',
+                              day_of_week=W_DAY_OF_WEEK,
+                              hour=W_HOUR,
+                              minute=W_MINUTE)
+
+            break
+        else:
+            pass
+        print(job.name, job.id)
+    await message.answer(f"Изменил время рассылки")
+
+
 @dp.message_handler(commands=["whour"])
 async def set_time(message: types.Message):
     global W_HOUR
@@ -226,6 +245,19 @@ async def set_time(message: types.Message):
     await message.answer(f"Минуты:{W_MINUTE}")
 
 """quarter"""
+
+
+@dp.message_handler(commands=["qstart"])
+async def set_time(message: types.Message):
+    for job in scheduler.get_jobs():
+        if job.name == "mailing_quarter":
+            scheduler.remove_job(job.id)
+            scheduler.add_job(mailing_quarter, 'cron',
+                              month=Q_MONTHS,
+                              day=Q_DAY,
+                              hour=Q_HOUR,
+                              minute=Q_MINUTE)
+    await message.answer(f"Изменил время рассылки")
 
 
 @dp.message_handler(commands=["qhour"])
@@ -268,20 +300,27 @@ async def mailing_list(message: types.Message):
 
 @ dp.message_handler()
 async def text_handler(message: types.Message):
-
     await message.answer("Извините,я не понимаю текст.\n Введите другую команду!", reply_markup=start_())
 
 
-if __name__ == "__main__":
-    scheduler = AsyncIOScheduler(timezone='Europe/Moscow')
-    scheduler.start()
+async def week_sched():
     scheduler.add_job(mailing_week, 'cron',
-                      day_of_week=W_DAY_OF_WEEK,  hour=W_HOUR, minute=W_MINUTE)
+                      day_of_week=W_DAY_OF_WEEK,
+                      hour=W_HOUR,
+                      minute=W_MINUTE)
+
+
+async def quart_sched():
     scheduler.add_job(mailing_quarter, 'cron',
                       month=Q_MONTHS,
                       day=Q_DAY,
                       hour=Q_HOUR,
                       minute=Q_MINUTE)
+
+
+if __name__ == "__main__":
+    scheduler = AsyncIOScheduler(timezone='Europe/Moscow')
+    scheduler.start()
     executor.start_polling(dispatcher=dp,
                            on_shutdown=on_shutdown,
                            on_startup=on_startup,
