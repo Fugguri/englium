@@ -37,9 +37,9 @@ Q_DAY = '28'
 Q_HOUR = '19'
 Q_MINUTE = "00"
 
-W_DAY_OF_WEEK = 'tue'
-W_HOUR = '17'
-W_MINUTE = '31'
+W_DAY_OF_WEEK = 'mon'
+W_HOUR = '19'
+W_MINUTE = '00'
 # Машина состояний для регистрации
 
 
