@@ -22,7 +22,7 @@ def unpack(a):
 
                     result += "<b>Оценки за урок: </b>" + "\n"
                 else:
-                    result += "<b>Оценки за урок: </b>" + ":" + \
+                    result += "<b>Оценки за урок: </b>" + \
                         str(a[date]["lessons"][lesson]['mark']) + "\n"
                 result += "\n"
         return result
@@ -58,13 +58,11 @@ def weeks(data, is_next=False):
                             comm = d[2]
 
                             if name in ["Classwork", "classwork"] and value == "2":
-                                name += ":❗️"
+                                name += "❗️"
                             if name in ["Homework", "Test", "test", "quiz", "homework", "Quiz"] and value in ["2", "Н", " ", ""]:
-                                name += ":❗️"
+                                name += "❗️"
 
                             result += "<b>" + name + "</b> "
-                            if ":" not in name:
-                                result += "<b>:</b> "
                             result += value + " "
                             result += comm + " "
 
@@ -107,12 +105,12 @@ def degrees(data):
                         value = d[1]
                         comm = d[2]
 
-                        if name in ["Classwork", "classwork"] and value in ["2", "Н"]:
-                            name += ":❗️"
+                        if name in ["Classwork", "classwork"] and value in ["2",]:
+                            name += "❗️"
                         if name in ["Homework", "Test", "test", "quiz", "homework", "Quiz"] and value in ["2", "Н", " ", ""]:
-                            name += ":❗️"
+                            name += "❗️"
 
-                        result += "<b>" + name + ":</b> "
+                        result += "<b>" + name + " </b>"
                         result += value + " "
                         result += comm + " "
 
