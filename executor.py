@@ -57,7 +57,7 @@ def weeks(data, is_next=False):
                             value = d[1]
                             comm = d[2]
 
-                            if name in ["Classwork", "classwork"] and value in ["2", "Н"]:
+                            if name in ["Classwork", "classwork"] and value == "2":
                                 name += ":❗️"
                             if name in ["Homework", "Test", "test", "quiz", "homework", "Quiz"] and value in ["2", "Н", " ", ""]:
                                 name += ":❗️"
