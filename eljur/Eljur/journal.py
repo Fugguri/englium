@@ -144,9 +144,9 @@ class Journal2:
                         lessonsDict[lessonName]["degrees"] = []
                         lessonsDict[lessonName]["hometask"] = []
                     if lessonHomeTask:
-
-                        lessonHomeTask = lessonHomeTask.contents[2].replace(
-                            "\n", "").strip()
+                        lessonHomeTask = "".join([
+                            str(i) for i in lessonHomeTask.contents[2:-2]]).replace("\n", "").strip().replace("<br/>", "\n")+"\n"
+                        print(lessonHomeTask)
                         lessonsDict[lessonName]["hometask"].append(
                             lessonHomeTask)
 

@@ -152,7 +152,10 @@ async def journal_request(message: types.Message):
     login, password = db.get_udata(message.from_user.id)
     data = degrees(quart(login, password))
 
-    await message.answer(data)
+    try:
+        await message.answer(data)
+    except:
+        await message.answer("Пока нечего показывать")
 
 
 @ dp.message_handler(Text(equals="Отписаться", ignore_case=True))
