@@ -80,7 +80,6 @@ def reportCard(login, password, week=0):
 
     answer = authorisation.login(subdomain, data)
     if "session" not in answer:
-        print(answer)
         return
     portfolio = Portfolio()
     # В ответ получает оценки ученика или ошибку.
@@ -99,7 +98,6 @@ def quart(login, password, week=0):
 
     answer = authorisation.login(subdomain, data)
     if "session" not in answer:
-        print(answer)
         return
 
     journal = Journal2()
