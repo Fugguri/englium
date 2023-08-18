@@ -19,34 +19,30 @@ def start_button2(login, password):
     quart_degrees = types.KeyboardButton('Четвертные оценки')
     homework = types.KeyboardButton('Домашние задания')
     mailing = types.KeyboardButton('Рассылка(всем пользователям)')
-    try:
-        auth(login, password)
-        # , degrees,  quart_degrees, homework
-        start.add(journal, passing)
-        return start
-    except:
-        return start_button()
+    start.add(journal, passing)
+    return start
 
 
 def start_():
     start = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
     register = types.KeyboardButton('/start')
-    start.add(register)
+    journal = types.KeyboardButton('Журнал')
+    passing = types.KeyboardButton('Успеваемость')
+    start.add(register, journal, passing)
+
     return start
 
 
-def remove():
-    remove = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
-    de = types.KeyboardButton('Отписаться')
-    register = types.KeyboardButton('/start')
-    journal = types.KeyboardButton('Журнал')
-    passing = types.KeyboardButton('Успеваемость')
-    remove.add(register, journal, passing, de)
-    return remove
+remove_ = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
+de = types.KeyboardButton('Отписаться')
+register = types.KeyboardButton('/start')
+journal = types.KeyboardButton('Журнал')
+passing = types.KeyboardButton('Успеваемость')
+remove_.add(register, journal, passing, de)
 
 
 def navigate():
-    keyboard = [[InlineKeyboardButton("Текущая неделя", callback_data='now'),],
+    keyboard = [[InlineKeyboardButton("Текущая неделя", callback_data='now')],
                 [InlineKeyboardButton('Предыдущая неделя', callback_data="before"),
                  InlineKeyboardButton('Следующая неделя', callback_data="next")],]
 
