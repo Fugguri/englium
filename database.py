@@ -36,13 +36,10 @@ class Database:
 
     def all_users(self):
         with self.connection:
-            exist = f"""
-            SELECT *
-            FROM users
-            """
+            exist = f"""SELECT * FROM users"""
+            
             return [data for data in self.cursor.execute(exist)]
 
     def remove(self, telegram_id):
         with self.connection:
-            self.cursor.execute(
-                "DELETE FROM users WHERE telegram_id = ?", (telegram_id,))
+            self.cursor.execute("DELETE FROM users WHERE telegram_id = ?", (telegram_id,))

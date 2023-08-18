@@ -62,9 +62,8 @@ async def start(message: types.Message):
 @ dp.message_handler(Text(equals="Журнал", ignore_case=True))
 async def journal_request(message: types.Message):
     try:
-
-        a = db.get_udata(message.from_user.id)
-        login, password = a[0], a[1]
+        user = db.get_udata(message.from_user.id)
+        login, password = user[0], user[1]
         text = ""
         text = weeks(journal(login, password, week=0))
         await message.answer(text=text, reply_markup=navigate())
@@ -115,7 +114,6 @@ async def journal_request(message: types.Message):
     await Form.login.set()
     await message.reply("Введите логин для входа в электронный журнал")
 
-
 @ dp.message_handler(state=Form.login)
 async def process_name(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
@@ -124,9 +122,8 @@ async def process_name(message: types.Message, state: FSMContext):
     await Form.next()
     await message.reply("Введите пароль")
 
-    """Провести проверку подключения!!!"""
-
-
+    """Проверка подключения"""
+    
 @ dp.message_handler(state=Form.password)
 async def process_name(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
