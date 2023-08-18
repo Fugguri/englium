@@ -10,7 +10,7 @@ from aiogram.dispatcher.filters.state import State, StatesGroup
 from eljur_connection import journal, auth
 from aiogram import types
 from aiogram.dispatcher.filters import Text
-from bd_connection import Database
+from database import Database
 from keyboards import start_button, start_button2, start_, remove_, navigate
 from eljur_connection import quart, journal
 from executor import degrees, weeks
