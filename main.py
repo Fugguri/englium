@@ -41,6 +41,7 @@ class Form(StatesGroup):
 
 
 async def on_startup(_):
+    print(db.all_users())
     print("Бот запущен")
 
 
