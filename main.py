@@ -25,7 +25,7 @@ dp = Dispatcher(bot, storage=storage)
 dp.middleware.setup(LoggingMiddleware())
 
 # Хранилище данных
-db = Database("var.db")
+db = Database("englium.db")
 # создает базу данных если ее нет
 connect = Eljur()
 db.cbdt()
