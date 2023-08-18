@@ -86,6 +86,9 @@ async def journal_request(message: types.Message):
 async def journal_request(message: types.Message):
     login, password = db.get_udata(message.from_user.id)
     data = degrees(quart(login, password, 0))
+    if not data:
+        await message.answer("Нет данных")
+        
     try:
         for d in data:
             await message.answer(str(d))
