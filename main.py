@@ -88,7 +88,6 @@ async def journal_request(message: types.Message):
     data = degrees(quart(login, password, 0))
     if not data:
         await message.answer("Нет данных")
-        
     try:
         for d in data:
             await message.answer(str(d))
@@ -114,11 +113,10 @@ async def now_week(callback: types.CallbackQuery):
     login, password = a[0], a[1]
     text = ""
     text = weeks(journal(login, password, week=-1))
-    print(text)
-    # try:
-    await callback.message.edit_text(text=text, reply_markup=navigate())
-    # except:
-    #     pass
+    try:
+        await callback.message.edit_text(text=text, reply_markup=navigate())
+    except:
+        pass
 
 
 @dp.callback_query_handler(lambda text: text.data == "next")
