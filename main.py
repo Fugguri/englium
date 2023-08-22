@@ -306,10 +306,20 @@ async def set_time(message: types.Message):
 @ dp.message_handler(commands=["mailing"])
 async def mailing_list(message: types.Message):
     text = message.get_args()
+    not_send = []
     for user in db.all_users():
         telegram_id = user[1]
-        await bot.send_message(text=f"{text}", chat_id=telegram_id)
-
+        try:
+            await bot.send_message(text=f"{text}", chat_id=telegram_id)
+        except Exception as ex:
+            not_send.append(user)
+    if len(not_send) != 0:
+        with open("not_send.txt", "w") as file:
+            for r in not_send:
+                file.write(f"{r}")
+        with open("not_send.txt", "rb") as file:
+            await message.answer_document(file)
+        os.system("rm not_send.txt")    
 
 @ dp.message_handler(commands=["adduser"])
 async def mailing_list(message: types.Message):
