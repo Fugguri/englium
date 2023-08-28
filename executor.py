@@ -41,7 +41,7 @@ def weeks(data, is_next=False):
                 result = ""
                 print(date)
                 try:
-                    date = data[a]["date"]
+                    date = data[a][date]
                 except:
                     continue
 
