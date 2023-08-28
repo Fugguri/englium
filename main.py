@@ -194,30 +194,35 @@ async def mailing_week():
     for user in db.all_users():
         login, password = user[2], user[3]
         telegram_id = user[1]
-
         try:
-            text = 'Вы подписаны на рассылку сообщений об успеваемости от школы Englium. \nЕсли вы хотите отписаться, нажмите кнопку "Отписаться"\n'
-            text += weeks(journal(login, password, week=-1))
-            await bot.send_message(telegram_id, text, reply_markup=remove_)
+            
+            try:
+                text = 'Вы подписаны на рассылку сообщений об успеваемости от школы Englium. \nЕсли вы хотите отписаться, нажмите кнопку "Отписаться"\n'
+                text += weeks(journal(login, password, week=-1))
+                await bot.send_message(telegram_id, text, reply_markup=remove_)
 
+            except:
+                await bot.send_message(chat_id=telegram_id,
+                                    text="Вы подписаны на рассылку сообщений об успеваемости от школы Englium. \nЕсли вы хотите отписаться, нажмите кнопку Отписаться",
+                                    reply_markup=remove_)
         except:
-            await bot.send_message(chat_id=telegram_id,
-                                   text="Вы подписаны на рассылку сообщений об успеваемости от школы Englium. \nЕсли вы хотите отписаться, нажмите кнопку Отписаться",
-                                   reply_markup=remove_)
-
+            pass
 
 async def mailing_quarter():
     for user in db.all_users():
         login, password = user[2], user[3]
         telegram_id = user[1]
         try:
-            text = 'Вы подписаны на рассылку сообщений об успеваемости от школы Englium. \nЕсли вы хотите отписаться, нажмите кнопку "Отписаться"\n'
-            text += weeks(quart(login, password))
-            await bot.send_message(telegram_id, text, reply_markup=remove_)
+            
+            try:
+                text = 'Вы подписаны на рассылку сообщений об успеваемости от школы Englium. \nЕсли вы хотите отписаться, нажмите кнопку "Отписаться"\n'
+                text += weeks(quart(login, password))
+                await bot.send_message(telegram_id, text, reply_markup=remove_)
 
+            except:
+                await bot.send_message(chat_id=telegram_id, text="Вы подписаны на рассылку сообщений об успеваемости от школы Englium. \nЕсли вы хотите отписаться, нажмите кнопку Отписаться", reply_markup=remove)
         except:
-            await bot.send_message(chat_id=telegram_id, text="Вы подписаны на рассылку сообщений об успеваемости от школы Englium. \nЕсли вы хотите отписаться, нажмите кнопку Отписаться", reply_markup=remove)
-
+            pass
     """WEEKS"""
 
 
