@@ -312,7 +312,7 @@ async def mailing_list(message: types.Message):
         try:
             await bot.send_message(text=f"{text}", chat_id=telegram_id)
         except Exception as ex:
-            not_send.append(user)
+            not_send.append((user,ex))
     if len(not_send) != 0:
         with open("not_send.txt", "w") as file:
             for r in not_send:
