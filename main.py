@@ -73,13 +73,18 @@ async def start(message: types.Message):
 
 @ dp.message_handler(Text(equals="Журнал", ignore_case=True))
 async def journal_request(message: types.Message):
-    # try:
-    a = db.get_udata(message.from_user.id)
-    login, password = a[0], a[1]
-    text = weeks(journal(login, password, week=0))
-    await message.answer(text=text, reply_markup=navigate())
-    # except:
-    #     await message.reply("Ошибочка, проверьте зарегистрированы ли вы в системе, возможно у вас сменился пароль!")
+    try:
+        a = db.get_udata(message.from_user.id)
+        login, password = a[0], a[1]
+        text = weeks(journal(login, password, week=0))
+        
+        if text != "":
+            await message.answer(text=text, reply_markup=navigate())
+        else:
+            await message.answer(text="Нет данных", reply_markup=navigate())
+            
+    except:
+        await message.reply("Ошибочка, проверьте зарегистрированы ли вы в системе, возможно у вас сменился пароль!")
 
 
 @ dp.message_handler(Text(equals="Успеваемость", ignore_case=True))
@@ -100,9 +105,13 @@ async def journal_request(message: types.Message):
 async def now_week(callback: types.CallbackQuery):
     a = db.get_udata(callback.from_user.id)
     login, password = a[0], a[1]
+    text=""
     text = weeks(journal(login, password,  week=0))
     try:
-        await callback.message.edit_text(text=text, reply_markup=navigate())
+        if text != "":
+            await callback.message.answer(text=text, reply_markup=navigate())
+        else:
+            await callback.message.answer(text="Нет данных", reply_markup=navigate())
     except:
         pass
 
@@ -114,9 +123,12 @@ async def now_week(callback: types.CallbackQuery):
     text = ""
     text = weeks(journal(login, password, week=-1))
     try:
-        await callback.message.edit_text(text=text, reply_markup=navigate())
-    except:
-        pass
+        if text != "":
+            await callback.message.answer(text=text, reply_markup=navigate())
+        else:
+            await callback.message.answer(text="Нет данных", reply_markup=navigate())
+    except Exception as ex:
+        print(ex)
 
 
 @dp.callback_query_handler(lambda text: text.data == "next")
@@ -125,10 +137,14 @@ async def next_week(callback: types.CallbackQuery):
     login, password = a[0], a[1]
     text = ""
     text = weeks(journal(login, password, week=1), is_next=True)
+    
     try:
-        await callback.message.edit_text(text=text, reply_markup=navigate())
-    except:
-        pass
+        if text != "":
+            await callback.message.answer(text=text, reply_markup=navigate())
+        else:
+            await callback.message.answer(text="Нет данных", reply_markup=navigate())
+    except Exception as ex:
+        print(ex)
 
 
 @ dp.message_handler(Text(equals="Регистрация", ignore_case=True))

@@ -31,7 +31,7 @@ def unpack(a):
 
 
 def weeks(data, is_next=False):
-
+    print(data)
     out = []
     if data == "Задание на каникулы":
         return "Каникулы"
@@ -39,11 +39,13 @@ def weeks(data, is_next=False):
         if data[a] != {}:
             for date in data[a]:
                 result = ""
+                print(date)
                 try:
-                    date = data[a][date]
+                    date = data[a]["date"]
                 except:
                     continue
-                result += "<b>Дата: </b>" + date["date"] + "\n"
+
+                result += "<b>Дата: </b>" + str(date) + "\n"
                 result += "<u>" + a + "</u>\n"
 
                 try:
