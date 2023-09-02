@@ -73,16 +73,17 @@ async def start(message: types.Message):
 
 @ dp.message_handler(Text(equals="Журнал", ignore_case=True))
 async def journal_request(message: types.Message):
-    try:
-        a = db.get_udata(message.from_user.id)
-        login, password = a[0], a[1]
-        text = weeks(journal(login, password, week=0))
-        
-        if text != "":
+    a = db.get_udata(message.from_user.id)
+    login, password = a[0], a[1]
+    text = weeks(journal(login, password, week=0))
+
+    if text:
             await message.answer(text=text, reply_markup=navigate())
-        else:
+    else:
             await message.answer(text="Нет данных", reply_markup=navigate())
-            
+    try:
+        
+            pass
     except:
         await message.reply("Ошибочка, проверьте зарегистрированы ли вы в системе, возможно у вас сменился пароль!")
 

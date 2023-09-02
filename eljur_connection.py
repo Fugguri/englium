@@ -63,7 +63,7 @@ def journal(login, password, week=0):
         return
 
     journal = Journal2()
-
+    
     # В ответ получает нынешнюю неделю или ошибку.
     answ = journal.journal2(subdomain, answer["session"], week=week)
     return answ
