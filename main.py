@@ -196,17 +196,19 @@ async def journal_request(message: types.Message):
 
 @ dp.message_handler(Text(equals="Рассылка(всем пользователям)"))
 async def maining(message: types.Message,):
+    mes = await message.answer("Начинаю рассылку успеваемости")
     for user in db.all_users():
         login, password = user[2], user[3]
         telegram_id = user[1]
-        mes = await message.answer("Начинаю рассылку успеваемости")
         try:
             text = 'Вы подписаны на рассылку сообщений об успеваемости от школы Englium. \nЕсли вы хотите отписаться, нажмите кнопку "Отписаться"\n'
             text += weeks(journal(login, password, week=-1))
             await bot.send_message(telegram_id, text, reply_markup=remove_)
         except Exception as ex:
             print(ex)
-
+    await mes.delete()
+    mes = await message.answer("Закончил рассылку об успеваемости")
+    
 async def mailing_week():
     for user in db.all_users():
         login, password = user[2], user[3]
