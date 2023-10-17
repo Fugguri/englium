@@ -195,51 +195,42 @@ async def journal_request(message: types.Message):
 
 
 @ dp.message_handler(Text(equals="Рассылка(всем пользователям)"))
-async def maining(sleep_for=1):
+async def maining(message: types.Message,):
     for user in db.all_users():
         login, password = user[2], user[3]
         telegram_id = user[1]
+        mes = await message.answer("Начинаю рассылку успеваемости")
         try:
             text = 'Вы подписаны на рассылку сообщений об успеваемости от школы Englium. \nЕсли вы хотите отписаться, нажмите кнопку "Отписаться"\n'
-            text += weeks(journal(login, password, week=0))
+            text += weeks(journal(login, password, week=-1))
             await bot.send_message(telegram_id, text, reply_markup=remove_)
-        except:
-            await bot.send_message(chat_id=telegram_id, text="Вы подписаны на рассылку сообщений об успеваемости от школы Englium.\nЕсли вы хотите отписаться, нажмите кнопку Отписаться", reply_markup=remove_)
-
+        except Exception as ex:
+            print(ex)
 
 async def mailing_week():
     for user in db.all_users():
         login, password = user[2], user[3]
         telegram_id = user[1]
         try:
-            
-            try:
-                text = 'Вы подписаны на рассылку сообщений об успеваемости от школы Englium. \nЕсли вы хотите отписаться, нажмите кнопку "Отписаться"\n'
-                text += weeks(journal(login, password, week=-1))
-                await bot.send_message(telegram_id, text, reply_markup=remove_)
+        
+            text = 'Вы подписаны на рассылку сообщений об успеваемости от школы Englium. \nЕсли вы хотите отписаться, нажмите кнопку "Отписаться"\n'
+            text += weeks(journal(login, password, week=-1))
+            await bot.send_message(telegram_id, text, reply_markup=remove_)
 
-            except:
-                await bot.send_message(chat_id=telegram_id,
-                                    text="Вы подписаны на рассылку сообщений об успеваемости от школы Englium. \nЕсли вы хотите отписаться, нажмите кнопку Отписаться",
-                                    reply_markup=remove_)
-        except:
-            pass
+        except Exception as ex:
+            print(ex)
 
 async def mailing_quarter():
     for user in db.all_users():
         login, password = user[2], user[3]
         telegram_id = user[1]
         try:
-            
-            try:
-                text = 'Вы подписаны на рассылку сообщений об успеваемости от школы Englium. \nЕсли вы хотите отписаться, нажмите кнопку "Отписаться"\n'
-                text += weeks(quart(login, password))
-                await bot.send_message(telegram_id, text, reply_markup=remove_)
+            text = 'Вы подписаны на рассылку сообщений об успеваемости от школы Englium. \nЕсли вы хотите отписаться, нажмите кнопку "Отписаться"\n'
+            text += weeks(quart(login, password))
+            await bot.send_message(telegram_id, text, reply_markup=remove_)
 
-            except:
-                await bot.send_message(chat_id=telegram_id, text="Вы подписаны на рассылку сообщений об успеваемости от школы Englium. \nЕсли вы хотите отписаться, нажмите кнопку Отписаться", reply_markup=remove)
-        except:
-            pass
+        except Exception as ex:
+            print(ex)
     """WEEKS"""
 
 
