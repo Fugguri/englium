@@ -54,10 +54,10 @@ def weeks(data, is_next=False):
                         for i in date["lessons"][lesson]["hometask"]:
                             result += f"<b>Домашнее задание: </b>{i}\n"
                         if is_next == False:
-                            if "Homework" not in names:
-                                result += "<b>Homework</b> ❗️\n"
-                            if "quiz" not in names and lesson == "Английский язык":
-                                result += "<b>quiz</b> ❗️\n"
+                            # if "Homework" not in names:
+                            #     result += "<b>Homework</b> ❗️\n"
+                            # if "quiz" not in names and lesson == "Английский язык":
+                            #     result += "<b>quiz</b> ❗️\n"
                             for d in date["lessons"][lesson]["degrees"]:
                                 name = d[0]
                                 value = d[1]
