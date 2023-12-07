@@ -62,13 +62,15 @@ def weeks(data, is_next=False):
                                 name = d[0]
                                 value = d[1]
                                 comm = d[2]
+
                                 if name in ["Classwork", "classwork"] and value == "2":
                                     name += "❗️"
                                 if name in ["Homework", "Test", "test", "quiz", "homework", "Quiz"] and value in ["2", "Н", " ", ""]:
                                     name += "❗️"
                                 result += "<b>" + name + "</b> "
-                                result += value + " "
-                                result += comm + " "
+                                # result += name+value+comm
+                                result += f" Оценка: {value}\n" if value else ""
+                                result += f" Урок: {comm}" if comm else ""
                                 result += "\n"
                         result += "" + "-----------------------\n"
                 except:
@@ -79,7 +81,7 @@ def weeks(data, is_next=False):
     return " ".join(out)
 
 
-def degrees(asd):   
+def degrees(asd):
     out = []
     for data in asd:
         for a in data:
