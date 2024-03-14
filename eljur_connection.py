@@ -56,14 +56,16 @@ def journal(login, password, week=0):
         "password": password,
     }
     subdomain = "englium"
+    print(123)
 
     answer = authorisation.login(subdomain, data)
+    print(answer)
     if "session" not in answer:
         print(answer)
         return
 
     journal = Journal2()
-    
+    print(123)
     # В ответ получает нынешнюю неделю или ошибку.
     answ = journal.journal2(subdomain, answer["session"], week=week)
     return answ

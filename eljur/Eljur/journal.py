@@ -101,9 +101,11 @@ class Journal2:
                  answer // dict
                  result // bool
         """
+        print("Journal")
         checkWeek = _checkInstance(week, int)
         if "error" in checkWeek:
             return checkWeek
+
         del checkWeek
 
         url = f"https://{subdomain}.eljur.ru/journal-app/week.{week * -1}"

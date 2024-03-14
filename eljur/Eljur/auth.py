@@ -30,10 +30,10 @@ class Authorization:
                  subdomain // str
                  result // bool
         """
-
         subdomain = _checkSubdomain(subdomain)
         if "error" in subdomain:
             return subdomain
+        print("check")
 
         session = Session()
         url = f"https://{subdomain}.eljur.ru/ajaxauthorize"
@@ -43,7 +43,6 @@ class Authorization:
         if "error" in checkStatus:
             return checkStatus
         del checkStatus
-
         if not err.json()["result"]:
             return {"error": {"error_code": -103,
                               "error_msg": err.json()['error'],
