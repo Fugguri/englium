@@ -24,7 +24,7 @@ class Authorization:
         subdomain = _checkSubdomain(subdomain)
         if "error" in subdomain:
             return subdomain
-        print(1)
+
         session = ClientSession()
         url = f"https://{subdomain}.eljur.ru/ajaxauthorize"
         err = await session.post(url=url, data=data)
@@ -39,14 +39,13 @@ class Authorization:
                               "error_msg": _json['error'],
                               "full_error": _json}}
         del err
-        print(23)
 
         url = f"https://{subdomain}.eljur.ru/?show=home"
         account = await session.get(url=url)
         checkStatus = _checkStatus(account, url)
         if "error" in checkStatus:
             return checkStatus
-        print(account.text)
+
         soup = BeautifulSoup(await account.text(), 'lxml')
 
         sentryData = _findData(soup)

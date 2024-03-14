@@ -38,10 +38,11 @@ async def journal(login, password, week=0):
         return
 
     journal = Journal2()
-    print(123)
+
     # В ответ получает нынешнюю неделю или ошибку.
     answ = await journal.journal2(subdomain, answer["session"], week=week)
-    print(answ)
+    await answer["session"].close()
+
     return answ
 
 
@@ -80,12 +81,12 @@ async def quart(login, password, week=0):
     journal = Journal2()
     # В ответ получает нынешнюю неделю или ошибку.
     answ = []
-    current_week = journal.journal2(subdomain, answer["session"], week=week)
+    current_week = await journal.journal2(subdomain, answer["session"], week=week)
     while current_week != "Задание на каникулы":
         week -= 1
         current_week = await journal.journal2(subdomain, answer["session"], week=week)
         answ.append(current_week)
-
+    await answer["session"].close()
     return answ
 
 

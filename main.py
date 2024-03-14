@@ -76,7 +76,6 @@ async def journal_request(message: types.Message):
     a = db.get_udata(message.from_user.id)
     login, password = a[0], a[1]
     text = await weeks(await journal(login, password, week=0))
-    print(text)
     if text:
         await message.answer(text=text, reply_markup=navigate())
     else:
