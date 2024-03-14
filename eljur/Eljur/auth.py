@@ -33,11 +33,11 @@ class Authorization:
         subdomain = _checkSubdomain(subdomain)
         if "error" in subdomain:
             return subdomain
-        print("check")
-
+        print(1)
         session = Session()
         url = f"https://{subdomain}.eljur.ru/ajaxauthorize"
         err = session.post(url=url, data=data)
+        print(2)
 
         checkStatus = _checkStatus(err, url)
         if "error" in checkStatus:
@@ -48,6 +48,7 @@ class Authorization:
                               "error_msg": err.json()['error'],
                               "full_error": err.json()}}
         del err
+        print(3)
 
         url = f"https://{subdomain}.eljur.ru/?show=home"
         account = session.get(url=url)
@@ -62,6 +63,7 @@ class Authorization:
         if not sentryData:
             return {"error": {"error_code": -104,
                               "error_msg": "Данные о пользователе не найдены."}}
+        print(4)
 
         return {"answer": json.loads(sentryData[17:-1]),
                 "session": session,

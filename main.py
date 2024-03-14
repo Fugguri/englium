@@ -75,20 +75,17 @@ async def start(message: types.Message):
 async def journal_request(message: types.Message):
     a = db.get_udata(message.from_user.id)
     login, password = a[0], a[1]
-    print(login, password)
-    print(journal(login, password, week=0))
-    # text = weeks(
-    #     )
+    try:
+        text = weeks(journal(login, password, week=0))
+        print(text)
+        if text:
+            await message.answer(text=text, reply_markup=navigate())
+        else:
+            await message.answer(text="Нет данных", reply_markup=navigate())
 
-    # if text:
-    #     await message.answer(text=text, reply_markup=navigate())
-    # else:
-    #     await message.answer(text="Нет данных", reply_markup=navigate())
-    # try:
-
-    #     pass
-    # except:
-    #     await message.reply("Ошибочка, проверьте зарегистрированы ли вы в системе, возможно у вас сменился пароль!")
+    except Exception as ex:
+        print(ex)
+        await message.reply("Ошибочка, проверьте зарегистрированы ли вы в системе, возможно у вас сменился пароль!")
 
 
 @ dp.message_handler(Text(equals="Успеваемость", ignore_case=True))
