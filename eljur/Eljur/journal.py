@@ -91,7 +91,7 @@ class Journal:
 
 class Journal2:
 
-    def journal2(self, subdomain, session, week=0):
+    async def journal2(self, subdomain, session, week=0):
         """
         Получение страницы дневника с расписанием, оценками и другой информации.
         :param subdomain: Поддомен eljur.ru                                                                           // str
@@ -101,7 +101,6 @@ class Journal2:
                  answer // dict
                  result // bool
         """
-        print("Journal")
         checkWeek = _checkInstance(week, int)
         if "error" in checkWeek:
             return checkWeek
@@ -109,7 +108,8 @@ class Journal2:
         del checkWeek
 
         url = f"https://{subdomain}.eljur.ru/journal-app/week.{week * -1}"
-        soup = _fullCheck(subdomain, session, url)
+        soup = await _fullCheck(subdomain, session, url)
+
         childs = soup.find(
             "div", class_="navigation-tabs__students")
         childs = childs.find_all("option")
@@ -118,7 +118,7 @@ class Journal2:
             child_id = i.attrs["value"].replace("/journal-app/", "")
             child_name = i.contents[0]
             url = f"https://{subdomain}.eljur.ru/journal-app/{child_id}/week.{week * -1}"
-            soup = _fullCheck(subdomain, session, url)
+            soup = await _fullCheck(subdomain, session, url)
             if "error" in soup:
                 return soup
             if soup.find("h1", class_="page-title red"):

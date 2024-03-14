@@ -1,6 +1,7 @@
 import re
 from bs4 import BeautifulSoup
 from requests import Session
+from aiohttp import ClientSession
 
 
 def _findData(soup):
@@ -12,10 +13,10 @@ def _findData(soup):
 
 
 def _checkStatus(err, url):
-    if not err.status_code:
+    if not err.status:
         return {"error": {"error_code": -102,
                           "error_msg": f"Возникла ошибка при отправке запроса по ссылке {url}"}}
-    if err.status_code >= 400:
+    if err.status >= 400:
         return {"error": {"error_code": -102,
                           "error_msg": f"Возникла ошибка {err.status_code} при отправке запроса  по ссылке {url}"}}
     else:
@@ -41,24 +42,26 @@ def _checkInstance(obj, cls):
                 "result": True}
 
 
-def _fullCheck(subdomain, session, url, data=None):
+async def _fullCheck(subdomain, session, url, data=None):
     subdomain = _checkSubdomain(subdomain)
     if "error" in subdomain:
         return subdomain
 
-    checkSession = _checkInstance(session, Session)
+    checkSession = _checkInstance(session, ClientSession)
     if "error" in checkSession:
+
         return checkSession
     del checkSession
 
-    getInfo = session.post(url=url, data=data)
+    getInfo = await session.post(url=url, data=data)
 
     checkStatus = _checkStatus(getInfo, url)
+
     if "error" in checkStatus:
         return checkStatus
     del checkStatus
 
-    soup = BeautifulSoup(getInfo.text, 'lxml')
+    soup = BeautifulSoup(await getInfo.text(), 'lxml')
     del getInfo, url
 
     sentryData = _findData(soup)

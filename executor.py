@@ -30,7 +30,7 @@ def unpack(a):
         return "Выходные"
 
 
-def weeks(data, is_next=False):
+async def weeks(data, is_next=False):
 
     out = []
     if data == "Задание на каникулы":
@@ -81,7 +81,7 @@ def weeks(data, is_next=False):
     return " ".join(out)
 
 
-def degrees(asd):
+async def degrees(asd):
     out = []
     for data in asd:
         for a in data:

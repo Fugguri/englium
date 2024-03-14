@@ -75,14 +75,14 @@ async def start(message: types.Message):
 async def journal_request(message: types.Message):
     a = db.get_udata(message.from_user.id)
     login, password = a[0], a[1]
+    text = await weeks(await journal(login, password, week=0))
+    print(text)
+    if text:
+        await message.answer(text=text, reply_markup=navigate())
+    else:
+        await message.answer(text="Нет данных", reply_markup=navigate())
     try:
-        text = weeks(journal(login, password, week=0))
-        print(text)
-        if text:
-            await message.answer(text=text, reply_markup=navigate())
-        else:
-            await message.answer(text="Нет данных", reply_markup=navigate())
-
+        ...
     except Exception as ex:
         print(ex)
         await message.reply("Ошибочка, проверьте зарегистрированы ли вы в системе, возможно у вас сменился пароль!")
@@ -91,7 +91,7 @@ async def journal_request(message: types.Message):
 @ dp.message_handler(Text(equals="Успеваемость", ignore_case=True))
 async def journal_request(message: types.Message):
     login, password = db.get_udata(message.from_user.id)
-    data = degrees(quart(login, password, 0))
+    data = await degrees(await quart(login, password, 0))
     if not data:
         await message.answer("Нет данных")
     try:
@@ -107,7 +107,7 @@ async def now_week(callback: types.CallbackQuery):
     a = db.get_udata(callback.from_user.id)
     login, password = a[0], a[1]
     text = ""
-    text = weeks(journal(login, password,  week=0))
+    text = await weeks(await journal(login, password,  week=0))
     try:
         if text != "":
             await callback.message.answer(text=text, reply_markup=navigate())
@@ -122,7 +122,7 @@ async def now_week(callback: types.CallbackQuery):
     a = db.get_udata(callback.from_user.id)
     login, password = a[0], a[1]
     text = ""
-    text = weeks(journal(login, password, week=-1))
+    text = await weeks(await journal(login, password, week=-1))
     try:
         if text != "":
             await callback.message.answer(text=text, reply_markup=navigate())
@@ -137,7 +137,7 @@ async def next_week(callback: types.CallbackQuery):
     a = db.get_udata(callback.from_user.id)
     login, password = a[0], a[1]
     text = ""
-    text = weeks(journal(login, password, week=1), is_next=True)
+    text = await weeks(await journal(login, password, week=1), is_next=True)
 
     try:
         if text != "":
@@ -202,7 +202,7 @@ async def maining(message: types.Message,):
         telegram_id = user[1]
         try:
             text = 'Вы подписаны на рассылку сообщений об успеваемости от школы Englium. \nЕсли вы хотите отписаться, нажмите кнопку "Отписаться"\n'
-            text += weeks(journal(login, password, week=-1))
+            text += await weeks(await journal(login, password, week=-1))
             await bot.send_message(telegram_id, text, reply_markup=remove_)
         except Exception as ex:
             print(ex)
@@ -217,7 +217,7 @@ async def mailing_week():
         try:
 
             text = 'Вы подписаны на рассылку сообщений об успеваемости от школы Englium. \nЕсли вы хотите отписаться, нажмите кнопку "Отписаться"\n'
-            text += weeks(journal(login, password, week=-1))
+            text += await weeks(await journal(login, password, week=-1))
             await bot.send_message(telegram_id, text, reply_markup=remove_)
 
         except Exception as ex:
@@ -230,7 +230,7 @@ async def mailing_quarter():
         telegram_id = user[1]
         try:
             text = 'Вы подписаны на рассылку сообщений об успеваемости от школы Englium. \nЕсли вы хотите отписаться, нажмите кнопку "Отписаться"\n'
-            text += weeks(quart(login, password))
+            text += await weeks(await quart(login, password))
             await bot.send_message(telegram_id, text, reply_markup=remove_)
 
         except Exception as ex:

@@ -1,37 +1,12 @@
 from eljur.Eljur.auth import Authorization
 from eljur.Eljur.journal import Journal, Journal2
-from eljur.Eljur.profile import Profile
 from eljur.Eljur.portfolio import Portfolio
 
 
 class Eljur():
     def __init__(self) -> None:
         self.authorisation = Authorization()
-
         self.subdomain = "englium"
-
-
-def is_login(login, password):
-    authorisation = Authorization()
-    data = {
-        "username": login,
-        "password": password
-    }
-    subdomain = "englium"
-
-    answer = authorisation.login(subdomain, data)
-    if "session" not in answer:
-        print(answer)
-        return
-    profile = Profile()
-    # В ответ возвращает информацию о профиле пользователя.
-    answ = profile.getProfile(subdomain, answer["session"])
-    result = []
-    for i in answ:
-        i, answ[i]
-        result.append(i)
-        result.append(answ[i])
-    return result
 
 
 def auth(login, password):
@@ -49,17 +24,15 @@ def auth(login, password):
         return False
 
 
-def journal(login, password, week=0):
+async def journal(login, password, week=0):
     authorisation = Authorization()
     data = {
         "username": login,
         "password": password,
     }
     subdomain = "englium"
-    print(123)
 
-    answer = authorisation.login(subdomain, data)
-    print(answer)
+    answer = await authorisation.login(subdomain, data)
     if "session" not in answer:
         print(answer)
         return
@@ -67,7 +40,8 @@ def journal(login, password, week=0):
     journal = Journal2()
     print(123)
     # В ответ получает нынешнюю неделю или ошибку.
-    answ = journal.journal2(subdomain, answer["session"], week=week)
+    answ = await journal.journal2(subdomain, answer["session"], week=week)
+    print(answ)
     return answ
 
 
@@ -90,7 +64,7 @@ def reportCard(login, password, week=0):
     return answ
 
 
-def quart(login, password, week=0):
+async def quart(login, password, week=0):
     authorisation = Authorization()
     data = {
         "username": login,
@@ -98,7 +72,7 @@ def quart(login, password, week=0):
     }
     subdomain = "englium"
 
-    answer = authorisation.login(subdomain, data)
+    answer = await authorisation.login(subdomain, data)
     if "session" not in answer:
         print(answer)
         return
@@ -106,9 +80,11 @@ def quart(login, password, week=0):
     journal = Journal2()
     # В ответ получает нынешнюю неделю или ошибку.
     answ = []
-    while journal.journal2(subdomain, answer["session"], week=week) != "Задание на каникулы":
+    current_week = journal.journal2(subdomain, answer["session"], week=week)
+    while current_week != "Задание на каникулы":
         week -= 1
-        answ.append(journal.journal2(subdomain, answer["session"], week=week))
+        current_week = await journal.journal2(subdomain, answer["session"], week=week)
+        answ.append(current_week)
 
     return answ
 
