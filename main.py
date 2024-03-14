@@ -19,7 +19,7 @@ from apscheduler.triggers.cron import CronTrigger
 from aiogram.types import KeyboardButton, ReplyKeyboardMarkup
 load_dotenv()
 SECRET_KEY = os.getenv('SECRET_KEY')
-    
+
 storage = MemoryStorage()
 bot = Bot(SECRET_KEY, parse_mode="HTML")
 dp = Dispatcher(bot, storage=storage)
@@ -78,12 +78,12 @@ async def journal_request(message: types.Message):
     text = weeks(journal(login, password, week=0))
 
     if text:
-            await message.answer(text=text, reply_markup=navigate())
+        await message.answer(text=text, reply_markup=navigate())
     else:
-            await message.answer(text="Нет данных", reply_markup=navigate())
+        await message.answer(text="Нет данных", reply_markup=navigate())
     try:
-        
-            pass
+
+        pass
     except:
         await message.reply("Ошибочка, проверьте зарегистрированы ли вы в системе, возможно у вас сменился пароль!")
 
@@ -106,7 +106,7 @@ async def journal_request(message: types.Message):
 async def now_week(callback: types.CallbackQuery):
     a = db.get_udata(callback.from_user.id)
     login, password = a[0], a[1]
-    text=""
+    text = ""
     text = weeks(journal(login, password,  week=0))
     try:
         if text != "":
@@ -138,7 +138,7 @@ async def next_week(callback: types.CallbackQuery):
     login, password = a[0], a[1]
     text = ""
     text = weeks(journal(login, password, week=1), is_next=True)
-    
+
     try:
         if text != "":
             await callback.message.answer(text=text, reply_markup=navigate())
@@ -180,7 +180,7 @@ async def process_name(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         data['password'] = message.text
         user_id, login, password = data["id"], data["login"], data["password"]
-        if quart(login, password, 0) != None:
+        if auth(login, password):
             db.create_user(user_id, login, password)
             await message.reply("Успешно!", reply_markup=start_button2(login, password))
             await state.finish()
@@ -208,19 +208,21 @@ async def maining(message: types.Message,):
             print(ex)
     await mes.delete()
     mes = await message.answer("Закончил рассылку об успеваемости")
-    
+
+
 async def mailing_week():
     for user in db.all_users():
         login, password = user[2], user[3]
         telegram_id = user[1]
         try:
-        
+
             text = 'Вы подписаны на рассылку сообщений об успеваемости от школы Englium. \nЕсли вы хотите отписаться, нажмите кнопку "Отписаться"\n'
             text += weeks(journal(login, password, week=-1))
             await bot.send_message(telegram_id, text, reply_markup=remove_)
 
         except Exception as ex:
             print(ex)
+
 
 async def mailing_quarter():
     for user in db.all_users():
@@ -327,14 +329,15 @@ async def mailing_list(message: types.Message):
         try:
             await bot.send_message(text=f"{text}", chat_id=telegram_id)
         except Exception as ex:
-            not_send.append((user,ex))
+            not_send.append((user, ex))
     if len(not_send) != 0:
         with open("not_send.txt", "w") as file:
             for r in not_send:
                 file.write(f"{r}")
         with open("not_send.txt", "rb") as file:
             await message.answer_document(file)
-        os.system("rm not_send.txt")    
+        os.system("rm not_send.txt")
+
 
 @ dp.message_handler(commands=["adduser"])
 async def mailing_list(message: types.Message):
@@ -362,7 +365,7 @@ async def mailing_list(message: types.Message):
             result = ""
             msg += 1
             counter = 0
-    
+
     await message.answer(result)
 
 
