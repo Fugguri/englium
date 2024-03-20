@@ -89,7 +89,7 @@ async def journal_request(message: types.Message):
 
     except Exception as ex:
         print(ex)
-        await message.reply("Ошибочка, проверьте зарегистрированы ли вы в системе, возможно у вас сменился пароль!")
+        await message.reply("Ошибочка, проверьте зарегистрированы ли вы в системе, возможно у вас сменился пароль!\nМожете отписаться и зарегистрироваться заново.")
 
 
 @ dp.message_handler(Text(equals="Успеваемость", ignore_case=True))
@@ -201,7 +201,7 @@ async def process_name(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         data['password'] = message.text
         user_id, login, password = data["id"], data["login"], data["password"]
-        if auth(login, password):
+        if await auth(login, password):
             db.create_user(user_id, login, password)
             await message.reply("Успешно!", reply_markup=start_button2(login, password))
             await state.finish()

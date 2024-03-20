@@ -9,7 +9,7 @@ class Eljur():
         self.subdomain = "englium"
 
 
-def auth(login, password):
+async def auth(login, password):
     authorisation = Authorization()
     data = {
         "username": login,
@@ -18,7 +18,7 @@ def auth(login, password):
     subdomain = "englium"
 
     try:
-        authorisation.login(subdomain, data)
+        await authorisation.login(subdomain, data)
         return True
     except:
         return False
