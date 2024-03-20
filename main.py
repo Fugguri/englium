@@ -138,7 +138,7 @@ async def now_week(callback: types.CallbackQuery):
     journal_data = await journal(login, password, week=-1)
     if not journal_data:
         db.remove(callback.from_user.id)
-        await callback.message.answer("Не получилось найти данные, попробуйте войти по новой", reply_markup=start_button())
+        await callback.message.answer("Не получилось найти данные, пройдите регистрацию заново.\nЕсли ошибка осталась - обратитесь к администратору.", reply_markup=start_button())
     text = await weeks(journal_data)
     try:
         if text != "":
@@ -157,7 +157,7 @@ async def next_week(callback: types.CallbackQuery):
     journal_data = await journal(login, password, week=0)
     if not journal_data:
         db.remove(callback.from_user.id)
-        await callback.message.answer("Не получилось найти данные, попробуйте войти по новой", reply_markup=start_button())
+        await callback.message.answer("Не получилось найти данные, пройдите регистрацию заново.\nЕсли ошибка осталась - обратитесь к администратору.", reply_markup=start_button())
     text = await weeks(journal_data, is_next=True)
 
     try:
