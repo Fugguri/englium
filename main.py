@@ -75,18 +75,18 @@ async def start(message: types.Message):
 async def journal_request(message: types.Message):
     a = db.get_udata(message.from_user.id)
     login, password = a[0], a[1]
-    journal_data = await journal(login, password, week=0)
-    if not journal_data:
-        db.remove(message.from_user.id)
-        await message.answer("Не получилось найти данные, попробуйте войти по новой", reply_markup=start_button())
-    text = await weeks(journal_data)
-
-    if text:
-        await message.answer(text=text, reply_markup=navigate())
-    else:
-        await message.answer(text="Нет данных", reply_markup=navigate())
     try:
-        ...
+        journal_data = await journal(login, password, week=0)
+        if not journal_data:
+            db.remove(message.from_user.id)
+            await message.answer("Не получилось найти данные, попробуйте войти по новой", reply_markup=start_button())
+            return
+        text = await weeks(journal_data)
+        if text:
+            await message.answer(text=text, reply_markup=navigate())
+        else:
+            await message.answer(text="Нет данных", reply_markup=navigate())
+
     except Exception as ex:
         print(ex)
         await message.reply("Ошибочка, проверьте зарегистрированы ли вы в системе, возможно у вас сменился пароль!")
@@ -95,17 +95,17 @@ async def journal_request(message: types.Message):
 @ dp.message_handler(Text(equals="Успеваемость", ignore_case=True))
 async def journal_request(message: types.Message):
     login, password = db.get_udata(message.from_user.id)
-    quart_data = await quart(login, password, 0)
-    if not quart_data:
-        db.remove(message.from_user.id)
-        await message.answer("Не получилось найти данные, попробуйте войти по новой", reply_markup=start_button())
-    data = await degrees(quart_data)
-
-    if not data:
-        await message.answer("Нет данных")
     try:
-        for d in data:
-            await message.answer(str(d))
+        quart_data = await quart(login, password, 0)
+        if not quart_data:
+            db.remove(message.from_user.id)
+            await message.answer("Не получилось найти данные, попробуйте войти по новой", reply_markup=start_button())
+        data = await degrees(quart_data)
+
+        if not data:
+            await message.answer("Нет данных")
+            for d in data:
+                await message.answer(str(d))
     except:
         await message.answer("Ошибка, обратитесь к администратору.")
 
@@ -153,14 +153,14 @@ async def now_week(callback: types.CallbackQuery):
 async def next_week(callback: types.CallbackQuery):
     a = db.get_udata(callback.from_user.id)
     login, password = a[0], a[1]
-    text = ""
-    journal_data = await journal(login, password, week=0)
-    if not journal_data:
-        db.remove(callback.from_user.id)
-        await callback.message.answer("Не получилось найти данные, пройдите регистрацию заново.\nЕсли ошибка осталась - обратитесь к администратору.", reply_markup=start_button())
-    text = await weeks(journal_data, is_next=True)
-
     try:
+        text = ""
+        journal_data = await journal(login, password, week=0)
+        if not journal_data:
+            db.remove(callback.from_user.id)
+            await callback.message.answer("Не получилось найти данные, пройдите регистрацию заново.\nЕсли ошибка осталась - обратитесь к администратору.", reply_markup=start_button())
+        text = await weeks(journal_data, is_next=True)
+
         if text != "":
             await callback.message.answer(text=text, reply_markup=navigate())
         else:
