@@ -34,7 +34,6 @@ async def journal(login, password, week=0):
 
     answer = await authorisation.login(subdomain, data)
     if "session" not in answer:
-        print(answer)
         return
 
     journal = Journal2()
