@@ -89,7 +89,7 @@ async def journal_request(message: types.Message):
 
     except Exception as ex:
         print(ex)
-        await message.reply("Ошибочка, проверьте зарегистрированы ли вы в системе, возможно у вас сменился пароль!\nМожете отписаться и зарегистрироваться заново.")
+        await message.reply("Ошибочка, проверьте зарегистрированы ли вы в системе, возможно у вас сменился пароль!\nМожете отписаться и зарегистрироваться заново.", reply_markup=remove_)
 
 
 @ dp.message_handler(Text(equals="Успеваемость", ignore_case=True))
@@ -107,7 +107,7 @@ async def journal_request(message: types.Message):
             for d in data:
                 await message.answer(str(d))
     except:
-        await message.answer("Ошибка, обратитесь к администратору.")
+        await message.answer('Ошибка, обратитесь к администратору. Или зайдите в систему заново, через кнопку "Отписаться"', reply_markup=remove_)
 
 
 # Регистрация пользователя в боте
