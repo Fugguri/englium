@@ -96,6 +96,7 @@ async def journal_request(message: types.Message):
 async def journal_request(message: types.Message):
     login, password = db.get_udata(message.from_user.id)
     try:
+        mes = await message.answer("Собираю данные")
         quart_data = await quart(login, password, 0)
         if not quart_data:
             db.remove(message.from_user.id)
@@ -107,9 +108,12 @@ async def journal_request(message: types.Message):
             await message.answer(str(d))
     except:
         await message.answer('Ошибка, обратитесь к администратору. Или зайдите в систему заново, через кнопку "Отписаться"', reply_markup=remove_)
-
+    finally:
+        await mes.delete()
 
 # Регистрация пользователя в боте
+
+
 @dp.callback_query_handler(lambda text: text.data == "now")
 async def now_week(callback: types.CallbackQuery):
     a = db.get_udata(callback.from_user.id)
