@@ -101,11 +101,10 @@ async def journal_request(message: types.Message):
             db.remove(message.from_user.id)
             await message.answer("Не получилось найти данные, попробуйте войти по новой", reply_markup=start_button())
         data = await degrees(quart_data)
-
         if not data:
             await message.answer("Нет данных")
-            for d in data:
-                await message.answer(str(d))
+        for d in data:
+            await message.answer(str(d))
     except:
         await message.answer('Ошибка, обратитесь к администратору. Или зайдите в систему заново, через кнопку "Отписаться"', reply_markup=remove_)
 
