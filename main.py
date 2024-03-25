@@ -94,6 +94,7 @@ async def journal_request(message: types.Message):
 
 @ dp.message_handler(Text(equals="Успеваемость", ignore_case=True))
 async def journal_request(message: types.Message):
+    print(message.from_user.id)
     login, password = db.get_udata(message.from_user.id)
     try:
         mes = await message.answer("Собираю данные")
