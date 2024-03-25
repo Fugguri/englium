@@ -7,7 +7,7 @@ def start_button():
     start = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
     register = types.KeyboardButton('Регистрация')
     reg = types.KeyboardButton('/start')
-    start.add(register, reg)
+    start.add(register)
     return start
 
 
@@ -28,7 +28,7 @@ def start_():
     register = types.KeyboardButton('/start')
     journal = types.KeyboardButton('Журнал')
     passing = types.KeyboardButton('Успеваемость')
-    start.add(register, journal, passing)
+    start.add(journal, passing)
 
     return start
 
