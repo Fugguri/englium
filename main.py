@@ -74,8 +74,8 @@ async def start(message: types.Message):
 @ dp.message_handler(Text(equals="Журнал", ignore_case=True))
 async def journal_request(message: types.Message):
     a = db.get_udata(message.from_user.id)
-    login, password = a[0], a[1]
     try:
+        login, password = a[0], a[1]
         journal_data = await journal(login, password, week=0)
         if not journal_data:
             db.remove(message.from_user.id)
@@ -95,8 +95,8 @@ async def journal_request(message: types.Message):
 @ dp.message_handler(Text(equals="Успеваемость", ignore_case=True))
 async def journal_request(message: types.Message):
     print(message.from_user.id)
-    login, password = db.get_udata(message.from_user.id)
     try:
+        login, password = db.get_udata(message.from_user.id)
         mes = await message.answer("Собираю данные")
         quart_data = await quart(login, password, 0)
         if not quart_data:
