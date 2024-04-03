@@ -17,8 +17,10 @@ def _checkStatus(err, url):
         return {"error": {"error_code": -102,
                           "error_msg": f"Возникла ошибка при отправке запроса по ссылке {url}"}}
     if err.status >= 400:
-        return {"error": {"error_code": -102,
-                          "error_msg": f"Возникла ошибка {err.status} при отправке запроса  по ссылке {url}"}}
+        if err.errors:
+
+            return {"error": {"error_code": -102,
+                              "error_msg": f"Возникла ошибка {err.status} при отправке запроса  по ссылке {url}"}}
     else:
         return {"answer": "Ok",
                 "result": True}

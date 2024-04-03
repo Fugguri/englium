@@ -33,6 +33,7 @@ async def journal(login, password, week=0):
     subdomain = "englium"
 
     answer = await authorisation.login(subdomain, data)
+    print(answer)
     if "session" not in answer:
         return
 

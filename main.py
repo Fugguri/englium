@@ -77,10 +77,11 @@ async def journal_request(message: types.Message):
     try:
         login, password = a[0], a[1]
         journal_data = await journal(login, password, week=0)
-        if not journal_data:
-            db.remove(message.from_user.id)
-            await message.answer("Не получилось найти данные, попробуйте войти по новой", reply_markup=start_button())
-            return
+        print(journal_data)
+        # if not journal_data:
+        #     db.remove(message.from_user.id)
+        #     await message.answer("Не получилось найти данные, попробуйте войти по новой", reply_markup=start_button())
+        #     return
         text = await weeks(journal_data)
         if text:
             await message.answer(text=text, reply_markup=navigate())
@@ -205,7 +206,9 @@ async def process_name(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         data['password'] = message.text
         user_id, login, password = data["id"], data["login"], data["password"]
-        if await auth(login, password):
+        auth_ = await auth(login, password)
+        print(auth_)
+        if auth_:
             db.create_user(user_id, login, password)
             await message.reply("Успешно!", reply_markup=start_button2(login, password))
             await state.finish()

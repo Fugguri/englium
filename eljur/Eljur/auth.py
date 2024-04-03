@@ -28,7 +28,6 @@ class Authorization:
         session = ClientSession()
         url = f"https://{subdomain}.eljur.ru/ajaxauthorize"
         err = await session.post(url=url, data=data)
-
         checkStatus = _checkStatus(err, url)
         if "error" in checkStatus:
             return checkStatus
@@ -42,6 +41,7 @@ class Authorization:
 
         url = f"https://{subdomain}.eljur.ru/?show=home"
         account = await session.get(url=url)
+        print(account.json())
         checkStatus = _checkStatus(account, url)
         if "error" in checkStatus:
             return checkStatus
