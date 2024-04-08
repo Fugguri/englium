@@ -41,7 +41,6 @@ class Authorization:
 
         url = f"https://{subdomain}.eljur.ru/?show=home"
         account = await session.get(url=url)
-        print(account.json())
         checkStatus = _checkStatus(account, url)
         if "error" in checkStatus:
             return checkStatus

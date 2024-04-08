@@ -85,13 +85,14 @@ async def quart(login, password, week=0):
     if await journal.journal2(subdomain, answer["session"], week=week) == "Задание на каникулы"\
             or await journal.journal2(subdomain, answer["session"], week=week-1) == "Задание на каникулы":
         current_week = await journal.journal2(subdomain, answer["session"], week=week-1)
+    answ.append(current_week)
+
     while current_week != "Задание на каникулы":
         week -= 1
         current_week = await journal.journal2(subdomain, answer["session"], week=week)
         answ.append(current_week)
-    print(123)
+
     await answer["session"].close()
-    print(1234)
 
     return answ
 
